@@ -8,9 +8,29 @@ const app = Vue.createApp({
       playerHealth: 100,
       beastHealth: 100,
       currentRound: 0,
+      winner: null,
     }
   },
+  watch: {
+    playerHealth(value) {
+      if (value <= 0 && this.beastHealth <= 0) {
+        this.winner = "There Was a Draw!"
+      } else if (value <= 0) {
+        this.winner = "You Lost!"
+      }
+    },
+    beastHealth(value) {
+      if (value <= 0 && this.playerHealth <= 0) {
+        this.winner = "There Was a Draw!"
+      } else if (value <= 0) {
+        this.winner = "You Won!"
+      }
+    },
+  },
   computed: {
+    isGameOver() {
+      return this.winner !== null
+    },
     isSpecialAttackEnabled() {
       return this.currentRound % 3 !== 0 || this.currentRound === 0
     },
