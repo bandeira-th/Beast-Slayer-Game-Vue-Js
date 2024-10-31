@@ -33,9 +33,10 @@
         <h2>Game Over</h2>
         <div>
           <p>{{winner}}</p>
+          <button @click="startNewGame">Start New Game</button>
         </div>
       </section>
-      <section id="controls">
+      <section id="controls" v-else>
         <button @click="playerAttacks">ATTACK</button>
         <button
           :disabled="isSpecialAttackEnabled"
@@ -48,7 +49,29 @@
       </section>
       <section id="log" class="container">
         <h2>Battle Log</h2>
-        <ul></ul>
+        <ul v-if="battleLog.length > 0">
+          <li v-for="action in battleLog">
+            <div v-if="action.actionBy === 'player'">
+              <h3 class="log--player">You</h3>
+              <p v-if="action.actionType === 'attack'">
+                Attacked Beast -
+                <span class="log--damage">Damage: {{action.actionValue}}</span>
+              </p>
+              <p v-else-if="action.actionType === 'heal'">
+                Healed Himself -
+                <span class="log--heal">Heal: {{action.actionValue}}</span>
+              </p>
+            </div>
+
+            <div v-else="action.actionBy === 'beast'">
+              <h3 class="log--monster">Beast</h3>
+              <p v-if="action.actionType === 'attack'">
+                Attacked You -
+                <span class="log--damage">Damage: {{action.actionValue}}</span>
+              </p>
+            </div>
+          </li>
+        </ul>
       </section>
     </div>
   </body>

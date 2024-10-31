@@ -9,6 +9,7 @@ const app = Vue.createApp({
       beastHealth: 100,
       currentRound: 0,
       winner: null,
+      battleLog: [],
     }
   },
   watch: {
@@ -48,21 +49,31 @@ const app = Vue.createApp({
     },
   },
   methods: {
+    startNewGame() {
+      this.playerHealth = 100
+      this.beastHealth = 100
+      this.currentRound = 0
+      this.winner = null
+      this.battleLog = []
+    },
     playerAttacks() {
       const attackValue = getRandomValue(12, 5)
       this.beastHealth -= attackValue
+      this.addLogMessage("player", "attack", attackValue)
       this.beastAttacks()
       this.currentRound++
     },
     playerAttacksSpecial() {
       const attackValue = getRandomValue(25, 10)
       this.beastHealth -= attackValue
+      this.addLogMessage("player", "attack", attackValue)
       this.beastAttacks()
       this.currentRound++
     },
     beastAttacks() {
       const attackValue = getRandomValue(15, 8)
       this.playerHealth -= attackValue
+      this.addLogMessage("beast", "attack", attackValue)
     },
     healsPlayer() {
       const healValue = getRandomValue(18, 13)
@@ -71,11 +82,19 @@ const app = Vue.createApp({
       } else {
         this.playerHealth += healValue
       }
+      this.addLogMessage("player", "heal", healValue)
       this.beastAttacks()
       this.currentRound++
     },
     surrender() {
       this.winner = "You Lost!"
+    },
+    addLogMessage(who, what, value) {
+      this.battleLog.unshift({
+        actionBy: who,
+        actionType: what,
+        actionValue: value,
+      })
     },
   },
 }).mount("#game")
