@@ -35,9 +35,15 @@ const app = Vue.createApp({
       return this.currentRound % 3 !== 0 || this.currentRound === 0
     },
     playerHealthStyles() {
+      if (this.playerHealth < 0) {
+        return { width: "0%" }
+      }
       return { width: this.playerHealth + "%" }
     },
     beastHealthStyles() {
+      if (this.beastHealth < 0) {
+        return { width: "0%" }
+      }
       return { width: this.beastHealth + "%" }
     },
   },
@@ -67,6 +73,9 @@ const app = Vue.createApp({
       }
       this.beastAttacks()
       this.currentRound++
+    },
+    surrender() {
+      this.winner = "You Lost!"
     },
   },
 }).mount("#game")
